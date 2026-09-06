@@ -25,8 +25,24 @@ st.markdown("""
         }
         div[data-testid="stVerticalBlock"] { gap: 0 !important; }
 
-        html, body, .stApp { margin: 0 !important; padding: 0 !important; overflow: hidden !important; }
-        iframe { display: block !important; }
+        /* Collapse every wrapper down to the viewport so only the map's own
+           iframe scrolls - avoids the double scrollbar from Streamlit's own
+           containers also being scrollable. */
+        html, body, .stApp,
+        div[data-testid="stAppViewContainer"],
+        section[data-testid="stMain"],
+        div[data-testid="stMainBlockContainer"],
+        div[data-testid="stAppViewBlockContainer"],
+        div[data-testid="stVerticalBlockBorderWrapper"],
+        div[data-testid="element-container"],
+        .element-container, .block-container {
+            height: 100% !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
+        }
+        html, body { height: 100vh !important; margin: 0 !important; padding: 0 !important; }
+
+        iframe { display: block !important; width: 100% !important; height: 100vh !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -37,4 +53,4 @@ def load_map():
         return f.read()
 
 
-components.html(load_map(), height=1080, scrolling=True)
+components.html(load_map(), height=800, scrolling=True)
